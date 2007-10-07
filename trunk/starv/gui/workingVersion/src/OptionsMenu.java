@@ -17,9 +17,6 @@ public class OptionsMenu extends MenuHandler {
 		subMenu.add(menu = new MenuItem("Set Units"));
 		menu.addActionListener(this);
 		
-		subMenu.add(menu = new MenuItem("Set"));
-		menu.addActionListener(this);
-		
 		add(subMenu);
 		
 		add(menu = new MenuItem("Longitude/Lattitude"));
