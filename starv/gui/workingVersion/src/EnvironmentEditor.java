@@ -43,13 +43,14 @@ public class EnvironmentEditor {
 		else
 		{
 			try {
-				fos = new FileOutputStream( filePath );
-				ObjectOutputStream outStream = new ObjectOutputStream( fos );
+			//	fos = new FileOutputStream( filePath );
+			//	ObjectOutputStream outStream = new ObjectOutputStream( fos );
 
-			      outStream.writeObject( environment );
-			      outStream.flush();
+				System.out.print(filePath);
+				
+			  //    outStream.writeObject( environment );
+			  //    outStream.close();
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
@@ -58,29 +59,34 @@ public class EnvironmentEditor {
 	
 	public void saveAs()
 	{
-			//make sure to save it as the environment name
+		 //make sure to save it as the environment name
 	      FileDialog fd = new FileDialog( new Frame(), 
 	        "Save As...", FileDialog.SAVE );
-	      fd.show();
-	      filePath = new String( fd.getDirectory() + environment.getName() );
+	      fd.setVisible(true);
+	      
+	      String path = fd.getDirectory();
+	      
+	      if(path != null)
+	      {  filePath = new String( path + environment.getName() );
 
 	      
 		try {
 			fos = new FileOutputStream( filePath );
 			ObjectOutputStream outStream = new ObjectOutputStream( fos );
-
+			
 		      outStream.writeObject( environment );
-		      outStream.flush();
-		} catch (Exception e) {
+		      outStream.close();
+			} catch (Exception e) {
 			e.printStackTrace();
-		}
+			} 
+	      }
 	      
 	}//end saveAs
 
 	public void openEnvironment()
 	{
 		FileDialog fd = new FileDialog( new Frame(), "Open...",FileDialog.LOAD );
-		fd.show();
+		fd.setVisible(true);
 		filePath = new String( fd.getDirectory() + fd.getFile() );
 		//  Create a stream for reading.
 		try{
