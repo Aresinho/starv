@@ -1,3 +1,4 @@
+import java.awt.Color;
 import java.awt.Dimension;
 
 import javax.swing.BorderFactory;
@@ -13,6 +14,7 @@ public class MainWindow extends Window
 		super();
 		JTextArea test = new JTextArea(5, 30);
 		test.setText("The world view should go here");
+		test.setBackground(Color.BLACK);
 		
 		leftScroll = new JScrollPane(test);
 		leftScroll.setPreferredSize(new Dimension(800, 800));
