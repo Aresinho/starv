@@ -330,7 +330,7 @@ public class Java3DFrame extends Applet implements WindowListener, ActionListene
     }
     LinkedList tester = new LinkedList();
     tester.add((Object3D)objects.get(0));
-    System.out.println(" ###################   size is " + tester.size());
+    System.out.println(" ###############asdfasdf####   size is " + tester.size());
     EditorWindow.editor.setActiveObject(tester);
     
     }
