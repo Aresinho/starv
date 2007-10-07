@@ -9,7 +9,7 @@ import javax.swing.*;
 
 public class EditorWindow extends Window 
 {
-	public static EnvironmentEditor editor = null;
+	public static EnvironmentEditor editor = new EnvironmentEditor();
 	protected EditorWindow()
 	{
 		super();

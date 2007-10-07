@@ -137,6 +137,7 @@ public class EventHandler implements ActionListener {
 		if( (Context.EDITOR.toString()).equals(MainSystem.context) && event.equalsIgnoreCase("Cut"))
 		{
 			EditorWindow.editor.cut();
+			MainSystem.ex.reDraw();
 		}
 		if( (Context.EDITOR.toString()).equals(MainSystem.context) && event.equalsIgnoreCase("Delete"))
 		{
