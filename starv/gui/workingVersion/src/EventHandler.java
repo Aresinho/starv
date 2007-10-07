@@ -1,7 +1,6 @@
 import java.awt.*;
 import java.util.LinkedList;
 import java.awt.event.*;
-import java.awt.Toolkit.*;
 
 import javax.swing.*;
 
@@ -204,7 +203,6 @@ public class EventHandler implements ActionListener {
 	    	popUp.dispose();
 	    }
 	}
-	
 	
 	/**
 	 * Enumerable class to keep track of the different context of the program such as
