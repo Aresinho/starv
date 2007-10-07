@@ -169,7 +169,7 @@ public class Java3DFrame extends Applet implements WindowListener, ActionListene
     
 	  
     // Build the frame
-    exampleCanvas = new Canvas3D(null);
+    exampleCanvas = new Canvas3D(SimpleUniverse.getPreferredConfiguration());
     editorPanel.add(exampleCanvas);
     editorPanel.setPreferredSize(new Dimension(600,600));
     return editorPanel;
