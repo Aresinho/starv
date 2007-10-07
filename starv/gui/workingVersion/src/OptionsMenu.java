@@ -22,7 +22,7 @@ public class OptionsMenu extends MenuHandler {
 		
 		add(subMenu);
 		
-		add(menu = new MenuItem("Longitude/Langitude"));
+		add(menu = new MenuItem("Longitude/Lattitude"));
 		menu.addActionListener(this);
 		
 		add(menu = new MenuItem("Create New 3D Object"));

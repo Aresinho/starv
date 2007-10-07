@@ -64,20 +64,6 @@ import com.sun.j3d.utils.universe.SimpleUniverse;
 import com.sun.j3d.utils.universe.Viewer;
 import com.sun.j3d.utils.universe.ViewingPlatform;
 
-/**
- * The Example class is a base class extended by example applications. The class
- * provides basic features to create a top-level frame, add a menubar and
- * Canvas3D, build the universe, set up "examine" and "walk" style navigation
- * behaviors, and provide hooks so that subclasses can add 3D content to the
- * example's universe.
- * <P>
- * Using this Example class simplifies the construction of example applications,
- * enabling the author to focus upon 3D content and not the busywork of creating
- * windows, menus, and universes.
- * 
- * @version 1.0, 98/04/16
- * @author David R. Nadeau, San Diego Supercomputer Center
- */
 
 public class Java3DFrame extends Applet implements WindowListener, ActionListener,
     ItemListener, CheckboxMenuListener {
@@ -323,32 +309,20 @@ public class Java3DFrame extends Applet implements WindowListener, ActionListene
     exampleSceneTransform
         .setCapability(TransformGroup.ALLOW_TRANSFORM_WRITE);
     exampleSceneTransform.setCapability(Group.ALLOW_CHILDREN_EXTEND);
-    
-    //BranchGroup objRoot = new BranchGroup();
 
-    // Create a Transform3D that is a rotation about the
-    // Y-axis.  Add this to a TransformGroup and add the
-    // TransformGroup to the root of the subgraph.      
-    Transform3D rotateY = new Transform3D();
-    //rotateY.rotY(.6);
-    rotateY.rotX(.7);
-    rotateY.setTranslation(new Vector3d(2,2,2));
-    TransformGroup objTrans = 
-        new TransformGroup(rotateY);
-    sceneRoot.addChild(objTrans);
 
     // Create a simple Shape3D node; add it to the scene graph.
-    objTrans.addChild(new Cylinder(1,1));
+    Cylinder3D woop = new Cylinder3D();
+    sceneRoot.addChild(woop.drawMe(new Vector3d(0,0,2)));
+    
+    Sphere3D newS = new Sphere3D();
+    sceneRoot.addChild(newS.drawMe( new Vector3d(-1,3,0)));
+    
    
     Transform3D rot = new Transform3D();
-    rot.rotZ(.7);
-    //rot.setTranslation(new Vector3d(5,6,7));
+    
     TransformGroup obby = new TransformGroup(rot);
-    sceneRoot.addChild(obby);
-    obby.setPickable(true);
-    obby.addChild(new ColorCube(0.2));
-    // Have Java 3D perform optimizations on this scene graph.
-    //sceneRoot.compile();
+    
     TextureLoader texLoader = new TextureLoader("flooring.jpg", this);
     Texture groundTex = texLoader.getTexture();
     groundTex.setBoundaryModeS(Texture.WRAP);

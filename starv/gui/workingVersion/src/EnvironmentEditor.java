@@ -10,15 +10,15 @@ import java.util.Stack;
 
 
 public class EnvironmentEditor {
-	public Stack undo;
-	public Stack undoObject;
-	public Stack undoOther;
-	public Environment environment=null;
+	public static Stack undo;
+	public static Stack undoObject;
+	public static Stack undoOther;
+	public static Environment environment=null;
 	private boolean savedOnce = false;
-	public Object3D activeObject=null;
-	public LinkedList activeObjectList=null;
-	public Object3D copiedObject=null;
-	public LinkedList copiedObjectList=null;
+	public static Object3D activeObject=null;
+	public static LinkedList activeObjectList=null;
+	public static Object3D copiedObject=null;
+	public static LinkedList copiedObjectList=null;
 	FileOutputStream fos;
 	String filePath;
 	
@@ -32,9 +32,9 @@ public class EnvironmentEditor {
 		undoObject = new Stack();
 		undoOther = new Stack();
 	}
-	public void createNew(double length, double width, String name)
+	public void createNew()
 	{
-		environment = new Environment(length, width, name);
+		environment = new Environment(100.0, 100.0, "new");
 	}
 	public void saveEnvironment()
 	{

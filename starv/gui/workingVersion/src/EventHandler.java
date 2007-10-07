@@ -1,4 +1,6 @@
 import java.awt.*;
+import java.util.LinkedList;
+
 import javax.swing.*;
 
 import javax.swing.JComponent;
@@ -7,7 +9,7 @@ public class EventHandler {
 	
 	JComponent newContentPane;
 	JFrame popUp = new JFrame("Set Size");
-	
+
 	public void findAndExecute(String event)
 	{
 		if(event.equalsIgnoreCase("exit"))
@@ -19,9 +21,10 @@ public class EventHandler {
 			
 		}
 		
-		if(event.equalsIgnoreCase("Map..."))
+		if(event.equals("Map..."))
 		{
 			redraw(Context.EDITOR);
+			System.out.println( " woop ?");
 		}
 		if(event.equalsIgnoreCase("trace"))
 		{
@@ -36,7 +39,70 @@ public class EventHandler {
 			popUp.pack();
 			popUp.setVisible(true);
 		}
-		System.out.print(event);
+		if( (Context.EDITOR.toString()).equals(MainSystem.context) && event.equalsIgnoreCase("New"))
+		{// create a new environment
+			EditorWindow.editor.createNew();
+			System.out.println("done creating a new environment");
+		}
+		if( (Context.EDITOR.toString()).equals(MainSystem.context) && event.equalsIgnoreCase("Open"))
+		{
+			EditorWindow.editor.openEnvironment();
+		}
+		if( (Context.EDITOR.toString()).equals(MainSystem.context) && event.equalsIgnoreCase("Save"))
+		{
+			EditorWindow.editor.saveEnvironment();
+		}
+		if( (Context.EDITOR.toString()).equals(MainSystem.context) && event.equalsIgnoreCase("Save As"))
+		{
+			EditorWindow.editor.saveAs();
+		}
+		if( (Context.EDITOR.toString()).equals(MainSystem.context) && event.equalsIgnoreCase("Save All"))
+		{
+			//not sure whats to be done here
+		}
+		if( (Context.EDITOR.toString()).equals(MainSystem.context) && event.equalsIgnoreCase("Close"))
+		{
+			redraw(Context.MAIN);
+		}
+		if( (Context.EDITOR.toString()).equals(MainSystem.context) && event.equalsIgnoreCase("Exit"))
+			System.exit(0);
+		if( (Context.EDITOR.toString()).equals(MainSystem.context) && event.equalsIgnoreCase("Undo"))
+		{
+			EditorWindow.editor.undo();
+		}
+		if( (Context.EDITOR.toString()).equals(MainSystem.context) && event.equalsIgnoreCase("Copy"))
+		{
+			EditorWindow.editor.copy();
+		}
+		if( (Context.EDITOR.toString()).equals(MainSystem.context) && event.equalsIgnoreCase("Paste"))
+		{
+			EditorWindow.editor.paste();
+		}
+		if( (Context.EDITOR.toString()).equals(MainSystem.context) && event.equalsIgnoreCase("Cut"))
+		{
+			EditorWindow.editor.cut();
+		}
+		if( (Context.EDITOR.toString()).equals(MainSystem.context) && event.equalsIgnoreCase("Delete"))
+		{
+			EditorWindow.editor.delete();
+		}
+		if( (Context.EDITOR.toString()).equals(MainSystem.context) && event.equalsIgnoreCase("Select All"))
+		{
+			EditorWindow.editor.selectAll();
+		}
+		if( (Context.EDITOR.toString()).equals(MainSystem.context) && event.equalsIgnoreCase("Set World Parameters"))
+		{
+			
+		}
+		if( (Context.EDITOR.toString()).equals(MainSystem.context) && event.equalsIgnoreCase("Longitude/Lattitude"))
+		{
+			
+		}
+		if( (Context.EDITOR.toString()).equals(MainSystem.context) && event.equalsIgnoreCase("Create new 3D Object"))
+		{
+			EditorWindow.editor.createNewObject3D( new LinkedList()/* Must recieve a linked list of all currently selected objects */);
+		}
+		
 	}
 	
 	/**

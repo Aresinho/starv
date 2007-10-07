@@ -9,6 +9,7 @@ import javax.swing.*;
 
 public class EditorWindow extends Window 
 {
+	public static EnvironmentEditor editor = null;
 	protected EditorWindow()
 	{
 		super();
@@ -31,5 +32,6 @@ public class EditorWindow extends Window
 		right.add(new JLabel("Toolbars go here"));
 		
 		packPane();
+		editor = new EnvironmentEditor();// added making the environment editor.
 	}
 }
