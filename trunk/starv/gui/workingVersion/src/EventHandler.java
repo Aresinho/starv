@@ -173,15 +173,18 @@ public class EventHandler implements ActionListener {
 		{
 		case MAIN: 
 					newContentPane = new MainWindow();
+					MainSystem.frame.setTitle("S.T.A.R.V. Main");
 					MainSystem.frame.setMenuBar(new MainMenuBar());
 				    break;
 		case EDITOR:
 					newContentPane = new EditorWindow();
 					MainSystem.context = context.toString();
+					MainSystem.frame.setTitle("S.T.A.R.V. Map Editor");
 					MainSystem.frame.setMenuBar(new EditorMenuBar());
 					break;
 		case TRACE: 
 					newContentPane = new TraceWindow();
+					MainSystem.frame.setTitle("S.T.A.R.V. Trace");
 					MainSystem.frame.setMenuBar(new TraceMenuBar());
 					break;
 		}
