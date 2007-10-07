@@ -1,14 +1,6 @@
 import java.applet.Applet;
-import java.awt.AWTEvent;
-import java.awt.BorderLayout;
-import java.awt.Button;
 import java.awt.CheckboxMenuItem;
-import java.awt.Component;
-import java.awt.Cursor;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.Frame;
-import java.awt.GridLayout;
 import java.awt.Menu;
 import java.awt.MenuBar;
 import java.awt.Scrollbar;
