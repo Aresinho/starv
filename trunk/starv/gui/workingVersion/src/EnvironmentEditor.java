@@ -150,8 +150,12 @@ public class EnvironmentEditor {
 			undoObject.push(environment.getObjects());
 			undo.push(PASTE);
 			for(int k=0; k<copiedObjectList.size(); k++)
-				environment.addObject3D((Object3D)copiedObjectList.get(k));
-			// might need to change the postion of the object, right now being pasted over its copy
+			{
+				Object3D itemToPaste = (Object3D)copiedObjectList.get(k);
+				//itemToPaste.setVector(/* new position goes here */);
+				environment.addObject3D(itemToPaste);
+			}
+				
 		}
 	}// end paste
 	public void copy()
@@ -179,8 +183,8 @@ public class EnvironmentEditor {
 		{
 			undoObject.push(environment.getObjects());
 			undo.push(CUT);
-			for(int k=0; k<copiedObjectList.size();k++)
-				environment.removeObject3D((Object3D)copiedObjectList.get(k));
+			for(int k=0; k<activeObjectList.size();k++)
+				environment.removeObject3D((Object3D)activeObjectList.get(k));
 		}
 	}//end delete
 	public void selectAll()

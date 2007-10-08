@@ -33,6 +33,9 @@ import javax.vecmath.Point3d;
 import javax.vecmath.Point3f;
 import javax.vecmath.Vector3d;
 import javax.vecmath.Vector3f; 
+
+import com.sun.j3d.utils.behaviors.mouse.MouseRotate;
+import com.sun.j3d.utils.behaviors.mouse.MouseZoom;
 import com.sun.j3d.utils.image.TextureLoader;
 import com.sun.j3d.utils.universe.PlatformGeometry;
 import com.sun.j3d.utils.universe.SimpleUniverse;
@@ -284,29 +287,29 @@ public class Java3DFrame extends Applet implements WindowListener, ActionListene
         .setCapability(TransformGroup.ALLOW_TRANSFORM_READ);
     exampleSceneTransform
         .setCapability(TransformGroup.ALLOW_TRANSFORM_WRITE);
-    exampleSceneTransform.setCapability(Group.ALLOW_CHILDREN_EXTEND);
+    //exampleSceneTransform.setCapability(Group.ALLOW_CHILDREN_EXTEND);
 
 
     // Create a simple Shape3D node; add it to the scene graph.
     EditorWindow.editor.environment = new Environment();
-    EditorWindow.editor.environment.addObject3D(new Cylinder3D());
-    EditorWindow.editor.environment.addObject3D(new Box3D());
-    EditorWindow.editor.environment.addObject3D(new Sphere3D());
-    LinkedList objects = new LinkedList();
+    Cylinder3D poop = new Cylinder3D();
+    poop.setVector(new Vector3d(1,1,1));
+    EditorWindow.editor.environment.addObject3D(poop);
+    //EditorWindow.editor.environment.addObject3D(new Box3D());
+    Sphere3D woop = new Sphere3D();
+    woop.setVector(new Vector3d(-1,-1,-1));
+    EditorWindow.editor.environment.addObject3D(woop);
+
+    sceneRoot.setCapability(BranchGroup.ALLOW_CHILDREN_READ);
+    sceneRoot.setCapability(BranchGroup.ALLOW_CHILDREN_WRITE);
+    sceneRoot.setCapability(BranchGroup.ALLOW_DETACH);
+    sceneRoot.setCapability(BranchGroup.ALLOW_CHILDREN_EXTEND);
     
-    if( EditorWindow.editor.environment != null){
-    objects =  EditorWindow.editor.environment.getObjects();
-    for(int k =0; k< objects.size();k++)
-    {
-    	Object3D currShape = (Object3D)objects.get(k);
-    	sceneRoot.addChild(currShape.drawMe(new Vector3d(k,(k *-1),0)));
-    }
     LinkedList tester = new LinkedList();
+    LinkedList objects = EditorWindow.editor.environment.getObjects();
     tester.add((Object3D)objects.get(0));
-    System.out.println(" ###############asdfasdf####   size is " + tester.size());
-    EditorWindow.editor.setActiveObject(tester);
     
-    }
+    EditorWindow.editor.setActiveObject(tester);
     System.out.println(" after for loop");
     
 
@@ -344,8 +347,8 @@ public class Java3DFrame extends Applet implements WindowListener, ActionListene
     if (groundTex != null)
       groundApp.setTexture(groundTex);
 
-    ElevationGrid ground = new ElevationGrid(11, // X dimension
-        11, // Z dimension
+    ElevationGrid ground = new ElevationGrid((int)EditorWindow.editor.environment.getLength(), // X dimension
+    		(int)EditorWindow.editor.environment.getWidth(), // Z dimension
         2.0f, // X spacing
         2.0f, // Z spacing
         // Automatically use zero heights
@@ -406,6 +409,14 @@ public class Java3DFrame extends Applet implements WindowListener, ActionListene
     //  Compile the scene branch group and add it to the
     //  SimpleUniverse.
     //
+    reDraw();
+    
+    
+
+    
+    
+    
+    
     if (shouldCompile)
       sceneRoot.compile();
     universe.addBranchGraph(sceneRoot);
@@ -556,7 +567,7 @@ public class Java3DFrame extends Applet implements WindowListener, ActionListene
 	    exampleSceneTransform.setTransform(trans);
 	    trans.set(new Vector3f(0.0f, 0.0f, 10.0f));
 	    exampleViewTransform.setTransform(trans);
-	    setNavigationType(Walk);
+	    setNavigationType(navigationType);
 	  }
 
   //
@@ -681,16 +692,39 @@ public class Java3DFrame extends Applet implements WindowListener, ActionListene
     
   }
   public void reDraw()
-  {
-	 LinkedList objects = new LinkedList();
-	  if( EditorWindow.editor.environment != null){
-		    objects =  EditorWindow.editor.environment.getObjects();
-		    for(int k =0; k< objects.size();k++)
-		    {
-		    	Object3D currShape = (Object3D)objects.get(k);
-		    	sceneRoot.addChild(currShape.drawMe(new Vector3d(k,(k *-1),0)));
-		    }
-	  }
+  { 
+	    LinkedList objects = new LinkedList();
+	    if( EditorWindow.editor.environment != null){
+	    	if(sceneRoot.numChildren() >5)
+	    		{
+	    		for(int m=5; m<sceneRoot.numChildren();m++){
+	    			BranchGroup temp = (BranchGroup)sceneRoot.getChild(m);
+	    			temp.detach();
+	    			sceneRoot.removeChild(m);
+	    		}
+	    		}
+	    	objects =  EditorWindow.editor.environment.getObjects();
+	    	for(int k =0; k< objects.size();k++)
+	    	{
+	    		BranchGroup objectBranchWrapper = new BranchGroup();
+	    		objectBranchWrapper.setCapability(BranchGroup.ALLOW_CHILDREN_READ);
+	    		objectBranchWrapper.setCapability(BranchGroup.ALLOW_CHILDREN_WRITE);
+	    		objectBranchWrapper.setCapability(BranchGroup.ALLOW_DETACH);
+	    		
+	    		Object3D currShape = (Object3D)objects.get(k);
+	    		System.out.println(currShape.toString());
+	    		TransformGroup objectGroupWrap = currShape.drawMe(currShape.getVector());
+	    		  MouseRotate behavior = new MouseRotate();
+	    		  behavior.setTransformGroup(objectGroupWrap);
+	    		  objectGroupWrap.addChild(behavior);
+	    		  //behavior.setSchedulingBounds(bounds);
+	    		objectBranchWrapper.addChild(objectGroupWrap);
+	    		sceneRoot.addChild(objectBranchWrapper);
+	    		objectBranchWrapper = null;
+	    	}
+
+	    
+	    }
   }
   /**
    * Handles checkbox items on a CheckboxMenu. The Example class has none of

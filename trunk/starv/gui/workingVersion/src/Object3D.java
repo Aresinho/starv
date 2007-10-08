@@ -6,14 +6,14 @@ import javax.vecmath.Vector3d;
 
 
 public abstract class Object3D {
-	public Vector3d translation;
+	
 	public TransformGroup group;
 	public Transform3D transform3d = new Transform3D();
 	public String indentifier;
 	public Object3D()
 	{
 		indentifier = nameGenerator();
-		translation = new Vector3d(0.0f, 0.0f, 0.0f);
+		//translation = new Vector3d(0.0f, 0.0f, 0.0f);
 	}
 	private String nameGenerator()
 	{
@@ -131,11 +131,9 @@ public abstract class Object3D {
 			break;
 		}//end swithc
 	}//end setRotation
-	public void setVector(/* Need to send soemthing that tells the postion */)
-	{/*
-		Probally pass the postion of the mouse, then figure out some algortim to translate that into valeus of vector3d
-	*/
-		
+	public Vector3d getVector()
+	{
+		return null;
 	}
 	
 }

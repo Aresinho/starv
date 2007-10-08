@@ -132,6 +132,7 @@ public class EventHandler implements ActionListener {
 		if( (Context.EDITOR.toString()).equals(MainSystem.context) && event.equalsIgnoreCase("Paste"))
 		{
 			EditorWindow.editor.paste();
+			MainSystem.ex.reDraw();
 		}
 		if( (Context.EDITOR.toString()).equals(MainSystem.context) && event.equalsIgnoreCase("Cut"))
 		{
@@ -141,6 +142,7 @@ public class EventHandler implements ActionListener {
 		if( (Context.EDITOR.toString()).equals(MainSystem.context) && event.equalsIgnoreCase("Delete"))
 		{
 			EditorWindow.editor.delete();
+			MainSystem.ex.reDraw();
 		}
 		if( (Context.EDITOR.toString()).equals(MainSystem.context) && event.equalsIgnoreCase("Select All"))
 		{
@@ -157,6 +159,10 @@ public class EventHandler implements ActionListener {
 		if( (Context.EDITOR.toString()).equals(MainSystem.context) && event.equalsIgnoreCase("Create new 3D Object"))
 		{
 			EditorWindow.editor.createNewObject3D( new LinkedList()/* Must recieve a linked list of all currently selected objects */);
+		}
+		if( (Context.EDITOR.toString()).equals(MainSystem.context) && event.equalsIgnoreCase("Help"))
+		{
+			MainSystem.ex.topDown();
 		}
 		
 	}
@@ -197,9 +203,16 @@ public class EventHandler implements ActionListener {
 	
 	public void actionPerformed(ActionEvent item) 
 	{ 
-	    if("ok".equalsIgnoreCase(item.getActionCommand()))
+	    if("setsize".equalsIgnoreCase(item.getActionCommand()))
 	    {
-	    	//call method to change size
+	    	EditorWindow.editor.environment.setLength(Integer.parseInt(reader.getText()));
+	    	EditorWindow.editor.environment.setWidth(Integer.parseInt((reader2.getText())));
+	    	EditorWindow.editor.environment.getObjects().remove(0);
+	    	MainSystem.ex = new Java3DFrame();
+	    	MainSystem.ex.initialize();
+	    	MainSystem.ex.buildUniverse();
+	    	EditorWindow.left.add(((Window) newContentPane).createPanelForComponent(EditorWindow.leftScroll, "Map View"));
+	    	popUp.dispose();
 	    }
 	    if("cancelSize".equalsIgnoreCase(item.getActionCommand()))
 	    {

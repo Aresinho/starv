@@ -23,8 +23,8 @@ abstract class Window extends JPanel {
 	 * View, the Simulation and main features go.
 	 */
 	
-	JPanel left;
-	JScrollPane leftScroll;
+	static JPanel left;
+	static JScrollPane  leftScroll;
 	
 	
 	/**

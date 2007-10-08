@@ -7,8 +7,8 @@ java.util.*;
 public class Environment implements Serializable {
 
 	private LinkedList objects;
-	private double length;
-	private double width;
+	private double length =11;
+	private double width =1;
 	private String [] longitude = new String[3];
 	private String [] latitude = new String[3];
 	private String name;
