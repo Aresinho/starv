@@ -8,6 +8,7 @@ import com.sun.j3d.utils.geometry.Cylinder;
 public class Cylinder3D extends Object3D {
 	float radius =1;
 	float length=1;
+	public static Vector3d translation;
 	public Cylinder3D()
 	{
 		super();
@@ -32,4 +33,14 @@ public class Cylinder3D extends Object3D {
 		return this.radius;
 	}
 	//public float
+	public void setVector(Vector3d vec)
+	{/*
+		Probally pass the postion of the mouse, then figure out some algortim to translate that into valeus of vector3d
+	*/translation = vec;
+		
+	}
+	public Vector3d getVector()
+	{
+		return translation;
+	}
 }
