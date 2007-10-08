@@ -2,11 +2,16 @@ import java.awt.Color;
 import java.awt.Dimension;
 
 import javax.swing.BorderFactory;
-import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import javax.swing.border.Border;
 
-
+/**
+ * Draws the Main Window of STARV. This window contains a space for a map and the different
+ * pallets related to it. 
+ * @author Ares
+ *
+ */
 public class MainWindow extends Window 
 {
 	protected MainWindow()
@@ -20,9 +25,17 @@ public class MainWindow extends Window
 		leftScroll.setPreferredSize(new Dimension(800, 800));
 		
 		left.add(createPanelForComponent(leftScroll, "World View"));
-		right.setBorder(BorderFactory.createTitledBorder("ToolBars"));
-		right.add(new JLabel("Toolbars go here"));
 		
+		//Create a border for the Right (Pallet) component
+		right.setBorder(BorderFactory.createTitledBorder("ToolBars"));
+		
+		//Add the necessary toolbars
+		right.add(new SimulationToolbar());
+		//Add empty space at the end to keep aesthetics
+		Border emptySpace = BorderFactory.createEmptyBorder(0, 0, 500, 0);
+		right.setBorder(emptySpace);
+		
+		//Pack the Pane;
 		packPane();
 	}
 }
