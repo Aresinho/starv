@@ -1,12 +1,15 @@
 import java.applet.Applet;
 import java.awt.CheckboxMenuItem;
+import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.Menu;
-import java.awt.MenuBar;
+import java.awt.ScrollPane;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.File;
@@ -19,6 +22,7 @@ import javax.media.j3d.DirectionalLight;
 import javax.media.j3d.Group;
 import javax.media.j3d.Light;
 import javax.media.j3d.Material;
+import javax.media.j3d.Shape3D;
 import javax.media.j3d.Texture;
 import javax.media.j3d.TextureAttributes;
 import javax.media.j3d.Transform3D;
@@ -36,15 +40,17 @@ import javax.vecmath.Vector3f;
 
 import com.sun.j3d.utils.behaviors.mouse.MouseRotate;
 import com.sun.j3d.utils.behaviors.mouse.MouseZoom;
+import com.sun.j3d.utils.geometry.Primitive;
 import com.sun.j3d.utils.image.TextureLoader;
+import com.sun.j3d.utils.picking.PickCanvas;
+import com.sun.j3d.utils.picking.PickResult;
 import com.sun.j3d.utils.universe.PlatformGeometry;
 import com.sun.j3d.utils.universe.SimpleUniverse;
 import com.sun.j3d.utils.universe.Viewer;
 import com.sun.j3d.utils.universe.ViewingPlatform;
 
 
-public class Java3DFrame extends Applet implements WindowListener, ActionListener,
-    ItemListener, CheckboxMenuListener {
+public class Java3DFrame extends Applet implements MouseListener {
   //  Navigation types
   public final static int Walk = 0;
 
@@ -55,10 +61,6 @@ public class Java3DFrame extends Applet implements WindowListener, ActionListene
 
   //  GUI objects for our subclasses
   protected Java3DFrame example = null;
-
-  protected JFrame exampleFrame = null;
-
-  protected MenuBar exampleMenuBar = null;
 
   protected Canvas3D exampleCanvas = null;
 
@@ -84,6 +86,8 @@ public class Java3DFrame extends Applet implements WindowListener, ActionListene
 
   private ExamineViewerBehavior examineBehavior = null;
 
+  PickCanvas pickCanvas;
+  
   private WalkViewerBehavior walkBehavior = null;
   BranchGroup sceneRoot = new BranchGroup();
   private int cycle =0;
@@ -91,20 +95,6 @@ public class Java3DFrame extends Applet implements WindowListener, ActionListene
   //--------------------------------------------------------------
   //  ADMINISTRATION
   //--------------------------------------------------------------
-
-  /**
-   * The main program entry point when invoked as an application. Each example
-   * application that extends this class must define their own main.
-   * 
-   * @param args
-   *            a String array of command-line arguments
-   */
-  public static void main(String[] args) {
-	  Java3DFrame ex = new Java3DFrame();
-	    ex.initialize();
-	    ex.buildUniverse();
-    ex.showFrame();
-  }
 
   /**
    * Constructs a new Example object.
@@ -125,7 +115,6 @@ public class Java3DFrame extends Applet implements WindowListener, ActionListene
 
     this.initialize();
     this.buildUniverse();
-    this.showFrame();
 
     // NOTE: add something to the browser page?
   }
@@ -137,18 +126,20 @@ public class Java3DFrame extends Applet implements WindowListener, ActionListene
    * @param args
    *            a String array of command-line arguments
    */
-  protected JComponent initialize() {
+  protected Component initialize() {
     
-	JPanel editorPanel = new JPanel();
-	editorPanel.setLayout(new BoxLayout(editorPanel, BoxLayout.PAGE_AXIS));
-    editorPanel.setBorder(BorderFactory.createEmptyBorder(5,5,5,5));
-    
-	  
-    // Build the frame
     exampleCanvas = new Canvas3D(SimpleUniverse.getPreferredConfiguration());
-    editorPanel.add(exampleCanvas);
-    editorPanel.setPreferredSize(new Dimension(600,600));
-    return editorPanel;
+   
+    
+    exampleCanvas.setPreferredSize(new Dimension(800,800));
+ //   ScrollPane scroll = new ScrollPane();  
+    
+  //  scroll.add(exampleCanvas);
+  //  scroll.setPreferredSize(new Dimension(600, 600));
+    
+    
+    
+    return exampleCanvas;
     
   }
 
@@ -325,7 +316,7 @@ public class Java3DFrame extends Applet implements WindowListener, ActionListene
     groundTex.setMinFilter(Texture.NICEST);
     groundTex.setMagFilter(Texture.NICEST);
     groundTex.setMipMapMode(Texture.BASE_LEVEL);
-    groundTex.setEnable(true);
+    groundTex.setEnable(true); 
 
     Appearance groundApp = new Appearance();
 
@@ -345,7 +336,7 @@ public class Java3DFrame extends Applet implements WindowListener, ActionListene
     groundApp.setTextureAttributes(groundTexAtt);
 
     if (groundTex != null)
-      groundApp.setTexture(groundTex);
+      groundApp.setTexture(groundTex); 
 
     ElevationGrid ground = new ElevationGrid((int)EditorWindow.editor.environment.getLength(), // X dimension
     		(int)EditorWindow.editor.environment.getWidth(), // Z dimension
@@ -382,18 +373,11 @@ public class Java3DFrame extends Applet implements WindowListener, ActionListene
     exampleSceneTransform.addChild(scene);
     sceneRoot.addChild(exampleSceneTransform);
 
-    examineBehavior = new ExamineViewerBehavior(exampleSceneTransform, // Transform
-        // gorup
-        // to
-        // modify
-        exampleFrame); // Parent frame for cusor changes
+    examineBehavior = new ExamineViewerBehavior(exampleSceneTransform);
     examineBehavior.setSchedulingBounds(allBounds);
     sceneRoot.addChild(examineBehavior);
 
-    walkBehavior = new WalkViewerBehavior(exampleViewTransform, // Transform
-        // group to
-        // modify
-        exampleFrame); // Parent frame for cusor changes
+    walkBehavior = new WalkViewerBehavior(exampleViewTransform);
     walkBehavior.setSchedulingBounds(allBounds);
     sceneRoot.addChild(walkBehavior);
 
@@ -412,16 +396,19 @@ public class Java3DFrame extends Applet implements WindowListener, ActionListene
     reDraw();
     
     
-
-    
-    
-    
-    
     if (shouldCompile)
       sceneRoot.compile();
     universe.addBranchGraph(sceneRoot);
 
     reset();
+    
+    
+    pickCanvas = new PickCanvas(exampleCanvas, sceneRoot);
+
+	pickCanvas.setMode(PickCanvas.BOUNDS);
+
+	exampleCanvas.addMouseListener(this);
+    
   }
 
   /**
@@ -567,7 +554,7 @@ public class Java3DFrame extends Applet implements WindowListener, ActionListene
 	    exampleSceneTransform.setTransform(trans);
 	    trans.set(new Vector3f(0.0f, 0.0f, 10.0f));
 	    exampleViewTransform.setTransform(trans);
-	    setNavigationType(navigationType);
+	    setNavigationType(Walk);
 	  }
 
   //
@@ -600,97 +587,7 @@ public class Java3DFrame extends Applet implements WindowListener, ActionListene
   //--------------------------------------------------------------
   //  USER INTERFACE
   //--------------------------------------------------------------
-
-  /**
-   * Builds the example AWT Frame menubar. Standard menus and their options
-   * are added. Applications that subclass this class should build their
-   * menubar additions within their initialize method.
-   * 
-   * @return a MenuBar for the AWT Frame
-   */
-  private MenuBar buildMenuBar() {
-    // Build the menubar
-    MenuBar menuBar = new MenuBar();
-
-    // File menu
-    Menu m = new Menu("File");
-    m.addActionListener(this);
-
-    m.add("Exit");
-
-    menuBar.add(m);
-
-    // View menu
-    m = new Menu("View");
-    m.addActionListener(this);
-
-    m.add("Reset view");
-
-    m.addSeparator();
-
-    walkMenuItem = new CheckboxMenuItem("Walk");
-    walkMenuItem.addItemListener(this);
-    m.add(walkMenuItem);
-
-    examineMenuItem = new CheckboxMenuItem("Examine");
-    examineMenuItem.addItemListener(this);
-    m.add(examineMenuItem);
-
-    if (navigationType == Walk) {
-      walkMenuItem.setState(true);
-      examineMenuItem.setState(false);
-    } else {
-      walkMenuItem.setState(false);
-      examineMenuItem.setState(true);
-    }
-
-    m.addSeparator();
-
-    headlightMenuItem = new CheckboxMenuItem("Headlight on/off");
-    headlightMenuItem.addItemListener(this);
-    headlightMenuItem.setState(headlightOnOff);
-    m.add(headlightMenuItem);
-
-    menuBar.add(m);
-
-    return menuBar;
-  }
-
-  /**
-   * Shows the application's frame, making it and its menubar, 3D canvas, and
-   * 3D content visible.
-   */
-  public void showFrame() {
-    exampleFrame.show();
-  }
-
-  /**
-   * Quits the application.
-   */
-  public void quit() {
-    System.exit(0);
-  }
-
-  /**
-   * Handles menu selections.
-   * 
-   * @param event
-   *            an ActionEvent indicating what menu action requires handling
-   */
-  public void actionPerformed(ActionEvent event) {
-    String arg = event.getActionCommand();
-    //System.out.println("############### "+ event. + " %%%%%%%% " + KeyEvent.VK_D);
-    if (arg.equals("Reset view"))
-      reset();
-    else if (arg.equals("Exit"))
-      quit();
-    else if(event.getActionCommand().compareTo("click")==0)
-    {
-    	System.out.println(" boobs");
-    	topDown();
-    }
-    
-  }
+  
   public void reDraw()
   { 
 	    LinkedList objects = new LinkedList();
@@ -757,36 +654,66 @@ public class Java3DFrame extends Applet implements WindowListener, ActionListene
       setNavigationType(Examine);
   }
 
-  /**
-   * Handles a window closing event notifying the application that the user
-   * has chosen to close the application without selecting the "Exit" menu
-   * item.
-   * 
-   * @param event
-   *            a WindowEvent indicating the window is closing
-   */
-  public void windowClosing(WindowEvent event) {
-    quit();
-  }
 
-  public void windowClosed(WindowEvent event) {
-  }
+  public void mouseClicked(MouseEvent e)
 
-  public void windowOpened(WindowEvent event) {
-  }
+  {
 
-  public void windowIconified(WindowEvent event) {
-  }
+      pickCanvas.setShapeLocation(e);
 
-  public void windowDeiconified(WindowEvent event) {
-  }
+      PickResult result = pickCanvas.pickClosest();
 
-  public void windowActivated(WindowEvent event) {
-  }
+      if (result == null) {
 
-  public void windowDeactivated(WindowEvent event) {
-  }
+         System.out.println("Nothing picked");
 
+      } else {
+
+         Primitive p = (Primitive)result.getNode(PickResult.PRIMITIVE);
+
+         Shape3D s = (Shape3D)result.getNode(PickResult.SHAPE3D);
+
+         if (p != null) {
+
+            System.out.println(p.getClass().getName());
+
+         } else if (s != null) {
+
+               System.out.println(s.getClass().getName());
+
+         } else{
+
+            System.out.println("null");
+
+         }
+
+      }
+
+  }
+  
+  
+  public void mousePressed(MouseEvent e) {
+      saySomething("Mouse pressed; # of clicks: "
+                   + e.getClickCount(), e);
+   }
+
+   public void mouseReleased(MouseEvent e) {
+      saySomething("Mouse released; # of clicks: "
+                   + e.getClickCount(), e);
+   }
+
+   public void mouseEntered(MouseEvent e) {
+      saySomething("Mouse entered", e);
+   }
+
+   public void mouseExited(MouseEvent e) {
+      saySomething("Mouse exited", e);
+   }
+
+   void saySomething(String eventDescription, MouseEvent e) {
+	   System.out.print(eventDescription);
+   }
+  
   //  Well known colors, positions, and directions
   public final static Color3f White = new Color3f(1.0f, 1.0f, 1.0f);
 
