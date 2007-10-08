@@ -2,16 +2,9 @@ import java.applet.Applet;
 import java.awt.CheckboxMenuItem;
 import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.ScrollPane;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
-import java.awt.event.MouseAdapter;
+
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
 import java.io.File;
 import java.util.LinkedList;
 import javax.media.j3d.Appearance;
@@ -27,11 +20,6 @@ import javax.media.j3d.Texture;
 import javax.media.j3d.TextureAttributes;
 import javax.media.j3d.Transform3D;
 import javax.media.j3d.TransformGroup;
-import javax.swing.BorderFactory;
-import javax.swing.BoxLayout;
-import javax.swing.JComponent;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
 import javax.vecmath.Color3f;
 import javax.vecmath.Point3d;
 import javax.vecmath.Point3f;
@@ -39,7 +27,6 @@ import javax.vecmath.Vector3d;
 import javax.vecmath.Vector3f; 
 
 import com.sun.j3d.utils.behaviors.mouse.MouseRotate;
-import com.sun.j3d.utils.behaviors.mouse.MouseZoom;
 import com.sun.j3d.utils.geometry.Primitive;
 import com.sun.j3d.utils.image.TextureLoader;
 import com.sun.j3d.utils.picking.PickCanvas;
@@ -623,65 +610,41 @@ public class Java3DFrame extends Applet implements MouseListener {
 	    
 	    }
   }
-  /**
-   * Handles checkbox items on a CheckboxMenu. The Example class has none of
-   * its own, but subclasses may have some.
-   * 
-   * @param menu
-   *            which CheckboxMenu needs action
-   * @param check
-   *            which CheckboxMenu item has changed
+  
+  
+  /** 
+   * Enables Object Selection. Creates a new Canvas that is able to select objects
+   * It throws a ray on the x and y coordinates and "captures" the object it hits
    */
-  public void checkboxChanged(CheckboxMenu menu, int check) {
-    // None for us
-  }
-
-  /**
-   * Handles on/off checkbox items on a standard menu.
-   * 
-   * @param event
-   *            an ItemEvent indicating what requires handling
-   */
-  public void itemStateChanged(ItemEvent event) {
-    Object src = event.getSource();
-    boolean state;
-    if (src == headlightMenuItem) {
-      state = headlightMenuItem.getState();
-      headlight.setEnable(state);
-    } else if (src == walkMenuItem)
-      setNavigationType(Walk);
-    else if (src == examineMenuItem)
-      setNavigationType(Examine);
-  }
-
-
   public void mouseClicked(MouseEvent e)
 
   {
-
+	  //Identify the source of the the click
       pickCanvas.setShapeLocation(e);
-
+      
+      //Get the object/node that it picked
       PickResult result = pickCanvas.pickClosest();
 
-      if (result == null) {
+      
+      if (result == null) { // Something was selected
 
-         System.out.println("Nothing picked");
+         System.out.println("Nothing picked"); // for testing
 
-      } else {
+      } else {  //Something was picked
 
          Primitive p = (Primitive)result.getNode(PickResult.PRIMITIVE);
 
-         Shape3D s = (Shape3D)result.getNode(PickResult.SHAPE3D);
+         Shape3D s = (Shape3D)result.getNode(PickResult.SHAPE3D); //Get the shape object
 
-         if (p != null) {
+         if (p != null) {  //Line Highlighting actions go here
 
             System.out.println(p.getClass().getName());
 
-         } else if (s != null) {
+         } else if (s != null) { //Object Highlighting actions go here
 
                System.out.println(s.getClass().getName());
 
-         } else{
+         } else{ //Upss Something is wrong, there is always something selected
 
             System.out.println("null");
 
@@ -692,24 +655,42 @@ public class Java3DFrame extends Applet implements MouseListener {
   }
   
   
+  /**
+   * Action to be taken with the mouse is pressed
+   */
   public void mousePressed(MouseEvent e) {
       saySomething("Mouse pressed; # of clicks: "
                    + e.getClickCount(), e);
    }
 
+  /**
+   * Action to be taken when the mouse i released
+   */
    public void mouseReleased(MouseEvent e) {
       saySomething("Mouse released; # of clicks: "
                    + e.getClickCount(), e);
    }
 
+   
+   /**
+    * Action to be taken when mouse enters our canvas
+    */
    public void mouseEntered(MouseEvent e) {
       saySomething("Mouse entered", e);
    }
 
+   /**
+    * Action to be taken when mouse exits canvas
+    */
    public void mouseExited(MouseEvent e) {
       saySomething("Mouse exited", e);
    }
 
+   /**
+    * Testing purposes
+    * @param eventDescription the event description
+    * @param e and event
+    */
    void saySomething(String eventDescription, MouseEvent e) {
 	   System.out.print(eventDescription);
    }
