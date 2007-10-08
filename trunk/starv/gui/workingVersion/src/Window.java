@@ -39,14 +39,19 @@ abstract class Window extends JPanel {
 	 */
 	JSplitPane pane;
 	
-	JDesktopPane desktop;
-	
+	/**
+	 * Creates a new empty window with two panels
+	 */
 	public Window()
 	{	super(new BorderLayout());
 		left = createVerticalBoxPanel();
 		right = createVerticalBoxPanel();
 	}
 	
+	/**
+	 * Creates a new Panel with a Vertical BoxLayout and centered
+	 * @return the new Panel
+	 */
 	public JPanel createVerticalBoxPanel() {
         JPanel p = new JPanel();
         p.setLayout(new BoxLayout(p, BoxLayout.PAGE_AXIS));
@@ -54,7 +59,10 @@ abstract class Window extends JPanel {
         return p;
     }
 	
-	
+	/**
+	 * Builds the window by adding both panels. Setting the Expandable icon
+	 * and creating an empty border around the frame;
+	 */
 	public void packPane()
 	{
 		pane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
@@ -66,8 +74,13 @@ abstract class Window extends JPanel {
 		setBorder(BorderFactory.createEmptyBorder(5,5,5,5));
 	}
 	
-	
-	public JPanel createPanelForComponent(JComponent comp,
+	/**
+	 * Creates a panel with a label for the components.
+	 * @param comp the desired component to encapsulate
+	 * @param title title of the panel
+	 * @return a BorderLayou Panel
+	 */
+	public static JPanel createPanelForComponent(JComponent comp,
             String title) 
 	{
 			JPanel panel = new JPanel(new BorderLayout());
