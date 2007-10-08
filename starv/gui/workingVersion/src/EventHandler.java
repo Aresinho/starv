@@ -42,7 +42,7 @@ public class EventHandler implements ActionListener {
 		{
 			TraceWindow.t.start();
 		}
-		if(event.equalsIgnoreCase("set size"))
+		if("set size".equalsIgnoreCase(event))
 		{
 			JPanel panel = new JPanel();
 			panel.setLayout(new BoxLayout(panel,BoxLayout.PAGE_AXIS));
@@ -55,13 +55,9 @@ public class EventHandler implements ActionListener {
 			reader.setPreferredSize(new Dimension(50,25));
 			messagex.add(reader);
 			
-			
-			
 			JPanel messageY = new JPanel();
 			messageY.setLayout(new BoxLayout(messageY,BoxLayout.X_AXIS));
 			messageY.add(new JLabel("Enter desired Y-Size: "));
-			
-			
 			
 			messageY.add(reader2);
 			
@@ -94,7 +90,56 @@ public class EventHandler implements ActionListener {
 			popUp.pack();
 			popUp.setVisible(true);
 		}
-		if( (Context.EDITOR.toString()).equals(MainSystem.context) && event.equalsIgnoreCase("New"))
+		if("Longitude/Lattitude".equalsIgnoreCase(event))
+		{
+			JPanel panel = new JPanel();
+			panel.setLayout(new BoxLayout(panel,BoxLayout.PAGE_AXIS));
+			
+			JPanel messagex = new JPanel();
+			messagex.setLayout(new BoxLayout(messagex,BoxLayout.X_AXIS));
+			panel.setBorder(BorderFactory.createEmptyBorder(30,15,30,15));
+		
+			messagex.add(new JLabel("Enter desired Longitude (01-23-34): "));
+			reader.setPreferredSize(new Dimension(50,25));
+			messagex.add(reader);
+				
+			JPanel messageY = new JPanel();
+			messageY.setLayout(new BoxLayout(messageY,BoxLayout.X_AXIS));
+			messageY.add(new JLabel("Enter desired Lattitude (01-23-45):  "));
+			
+			messageY.add(reader2);
+			
+			panel.setPreferredSize(new Dimension(350, 120));
+			
+			JButton ok = new JButton("Ok");
+			ok.setActionCommand("setSize");
+			JButton cancel = new JButton("Cancel");
+			
+			ok.addActionListener(this);
+			cancel.setActionCommand("cancelSize");
+			cancel.addActionListener(this);
+			
+			
+			JPanel decision = new JPanel();
+			decision.setLayout(new BoxLayout(decision, BoxLayout.X_AXIS));
+			decision.add(cancel);
+			decision.add(ok);
+			
+			panel.add(messagex);
+			panel.add(messageY);
+			panel.add(decision);
+			
+			Toolkit toolkit = java.awt.Toolkit.getDefaultToolkit ();
+			Dimension screensize = toolkit.getScreenSize ();
+			
+			popUp = new JFrame("Set Size");
+			popUp.setContentPane(panel);
+			popUp.setLocation(screensize.width / 2 - 130, screensize.height / 2 - 60);
+			popUp.pack();
+			popUp.setVisible(true);
+		}
+		
+		if( (Context.EDITOR.toString()).equals(MainSystem.context) && "New".equalsIgnoreCase(event))
 		{// create a new environment
 			EditorWindow.editor.createNew();
 			System.out.println("done creating a new environment");
