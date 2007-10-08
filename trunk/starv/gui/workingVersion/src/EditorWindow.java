@@ -1,9 +1,7 @@
+import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.ScrollPane;
 
-import javax.swing.BorderFactory;
-import javax.swing.JLabel;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
 import javax.swing.*;
 
 
@@ -16,17 +14,15 @@ public class EditorWindow extends Window
 		JTextArea test = new JTextArea(5, 30);
 		
 		MainSystem.ex = new Java3DFrame();
-		JComponent map = MainSystem.ex.initialize();
+		Component map = MainSystem.ex.initialize();
 		MainSystem.ex.buildUniverse();
 		
+		left.add(map, "Map View");
 		
-		leftScroll = new JScrollPane(map);
-		leftScroll.setPreferredSize(new Dimension(800, 800));
 		
-		left.add(createPanelForComponent(leftScroll, "Map View"));
-		
-		right.setBorder(BorderFactory.createTitledBorder("Editor ToolBars"));
-		right.add(new JLabel("Toolbars go here"));
+		right.setBorder(BorderFactory.createTitledBorder("Editor Controls"));
+		right.setPreferredSize(new Dimension(180,800));
+		right.add(new EditToolbar());
 		
 		packPane();
 	}
