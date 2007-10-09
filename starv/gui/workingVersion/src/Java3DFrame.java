@@ -11,6 +11,7 @@ import javax.media.j3d.Appearance;
 import javax.media.j3d.BoundingSphere;
 import javax.media.j3d.BranchGroup;
 import javax.media.j3d.Canvas3D;
+import javax.media.j3d.ColoringAttributes;
 import javax.media.j3d.DirectionalLight;
 import javax.media.j3d.Group;
 import javax.media.j3d.Light;
@@ -27,6 +28,7 @@ import javax.vecmath.Vector3d;
 import javax.vecmath.Vector3f; 
 
 import com.sun.j3d.utils.behaviors.mouse.MouseRotate;
+import com.sun.j3d.utils.geometry.Cylinder;
 import com.sun.j3d.utils.geometry.Primitive;
 import com.sun.j3d.utils.image.TextureLoader;
 import com.sun.j3d.utils.picking.PickCanvas;
@@ -78,7 +80,8 @@ public class Java3DFrame extends Applet implements MouseListener {
   private WalkViewerBehavior walkBehavior = null;
   BranchGroup sceneRoot = new BranchGroup();
   private int cycle =0;
-
+  BoundingSphere allBounds;
+  public boolean drawFloorFirstCall = true;
   //--------------------------------------------------------------
   //  ADMINISTRATION
   //--------------------------------------------------------------
@@ -236,7 +239,7 @@ public class Java3DFrame extends Applet implements MouseListener {
     //  add the light to it, then add that platform geometry to the
     //  ViewingPlatform.
     //
-    BoundingSphere allBounds = new BoundingSphere(
+     allBounds = new BoundingSphere(
         new Point3d(0.0, 0.0, 0.0), 100000.0);
 
     PlatformGeometry pg = new PlatformGeometry();
@@ -267,21 +270,25 @@ public class Java3DFrame extends Applet implements MouseListener {
         .setCapability(TransformGroup.ALLOW_TRANSFORM_WRITE);
     //exampleSceneTransform.setCapability(Group.ALLOW_CHILDREN_EXTEND);
 
-
+    sceneRoot.setCapability(BranchGroup.ALLOW_CHILDREN_READ);
+    sceneRoot.setCapability(BranchGroup.ALLOW_CHILDREN_WRITE);
+    sceneRoot.setCapability(BranchGroup.ALLOW_DETACH);
+    sceneRoot.setCapability(BranchGroup.ALLOW_CHILDREN_EXTEND);
     // Create a simple Shape3D node; add it to the scene graph.
     EditorWindow.editor.environment = new Environment();
     Cylinder3D poop = new Cylinder3D();
     poop.setVector(new Vector3d(1,1,1));
+    
+//  Create the drag behavior node
+
+    
     EditorWindow.editor.environment.addObject3D(poop);
     //EditorWindow.editor.environment.addObject3D(new Box3D());
     Sphere3D woop = new Sphere3D();
     woop.setVector(new Vector3d(-1,-1,-1));
     EditorWindow.editor.environment.addObject3D(woop);
 
-    sceneRoot.setCapability(BranchGroup.ALLOW_CHILDREN_READ);
-    sceneRoot.setCapability(BranchGroup.ALLOW_CHILDREN_WRITE);
-    sceneRoot.setCapability(BranchGroup.ALLOW_DETACH);
-    sceneRoot.setCapability(BranchGroup.ALLOW_CHILDREN_EXTEND);
+
     
     LinkedList tester = new LinkedList();
     LinkedList objects = EditorWindow.editor.environment.getObjects();
@@ -289,55 +296,7 @@ public class Java3DFrame extends Applet implements MouseListener {
     
     EditorWindow.editor.setActiveObject(tester);
     System.out.println(" after for loop");
-    
 
-    
-    Transform3D rot = new Transform3D();
-    
-    TransformGroup obby = new TransformGroup(rot);
-    
-    TextureLoader texLoader = new TextureLoader("flooring.jpg", this);
-    Texture groundTex = texLoader.getTexture();
-    groundTex.setBoundaryModeS(Texture.WRAP);
-    groundTex.setBoundaryModeT(Texture.WRAP);
-    groundTex.setMinFilter(Texture.NICEST);
-    groundTex.setMagFilter(Texture.NICEST);
-    groundTex.setMipMapMode(Texture.BASE_LEVEL);
-    groundTex.setEnable(true); 
-
-    Appearance groundApp = new Appearance();
-
-    Material groundMat = new Material();
-    groundMat.setAmbientColor(0.6f, 0.6f, 0.6f);
-    groundMat.setDiffuseColor(1.0f, 1.0f, 1.0f);
-    groundMat.setSpecularColor(0.0f, 0.0f, 0.0f);
-    groundApp.setMaterial(groundMat);
-
-    rot = new Transform3D();
-    rot.setScale(new Vector3d(4.0, 4.0, 1.0));
-
-    TextureAttributes groundTexAtt = new TextureAttributes();
-    groundTexAtt.setTextureMode(TextureAttributes.MODULATE);
-    groundTexAtt.setPerspectiveCorrectionMode(TextureAttributes.NICEST);
-    groundTexAtt.setTextureTransform(rot);
-    groundApp.setTextureAttributes(groundTexAtt);
-
-    if (groundTex != null)
-      groundApp.setTexture(groundTex); 
-
-    ElevationGrid ground = new ElevationGrid((int)EditorWindow.editor.environment.getLength(), // X dimension
-    		(int)EditorWindow.editor.environment.getWidth(), // Z dimension
-        2.0f, // X spacing
-        2.0f, // Z spacing
-        // Automatically use zero heights
-        groundApp); // Appearance
-    TransformGroup tg;
-    Vector3f trans = new Vector3f();
-    trans.set(0.0f, -1.0f, 0.0f);
-    rot.set(trans);
-    obby = new TransformGroup(rot);
-    obby.addChild(ground);
-    sceneRoot.addChild(obby);
     BoundingSphere worldBounds = new BoundingSphere(new Point3d(0.0, 0.0,
             0.0), // Center
             1000.0); // Extent
@@ -381,7 +340,7 @@ public class Java3DFrame extends Applet implements MouseListener {
     //  SimpleUniverse.
     //
     reDraw();
-    
+    drawFloor();
     
     if (shouldCompile)
       sceneRoot.compile();
@@ -541,7 +500,7 @@ public class Java3DFrame extends Applet implements MouseListener {
 	    exampleSceneTransform.setTransform(trans);
 	    trans.set(new Vector3f(0.0f, 0.0f, 10.0f));
 	    exampleViewTransform.setTransform(trans);
-	    setNavigationType(Walk);
+	    setNavigationType(Examine);
 	  }
 
   //
@@ -577,15 +536,37 @@ public class Java3DFrame extends Applet implements MouseListener {
   
   public void reDraw()
   { 
-	    LinkedList objects = new LinkedList();
+	  LinkedList objects = new LinkedList();
+	    //System.out.println( " the size that reDraw sees is " + EditorWindow.editor.environment.getObjects().size() );
 	    if( EditorWindow.editor.environment != null){
-	    	if(sceneRoot.numChildren() >5)
+	    	//System.out.println( " not null");
+	    	if(sceneRoot.numChildren() > 4)
 	    		{
-	    		for(int m=5; m<sceneRoot.numChildren();m++){
+	    		if(drawFloorFirstCall == false)
+	    		{
+	    			System.out.println(" popped in false");
+	    			for(int m=4; m<sceneRoot.numChildren();m++){
+	    				System.out.println( " in for 1");
+		    			BranchGroup temp = (BranchGroup)sceneRoot.getChild(m);
+		    			if(m !=sceneRoot.numChildren()-1){
+		    				temp.detach();
+		    			}
+		    			sceneRoot.removeChild(m);
+		    		}
+	    			System.out.println(" size after removing all after 4th " + sceneRoot.numChildren());
+	    		}
+	    		else{
+	    			System.out.println(" popped in true");
+	    		for(int m=4; m<sceneRoot.numChildren()-1;m++){
+	    			System.out.println( " in for 2");
 	    			BranchGroup temp = (BranchGroup)sceneRoot.getChild(m);
-	    			temp.detach();
+	    			{
+	    				System.out.println(" branch data  "+ temp.getChild(0).toString());
+	    				((BranchGroup)sceneRoot.getChild(m)).detach();
+	    			}
 	    			sceneRoot.removeChild(m);
 	    		}
+	    		}//end else
 	    		}
 	    	objects =  EditorWindow.editor.environment.getObjects();
 	    	for(int k =0; k< objects.size();k++)
@@ -596,22 +577,86 @@ public class Java3DFrame extends Applet implements MouseListener {
 	    		objectBranchWrapper.setCapability(BranchGroup.ALLOW_DETACH);
 	    		
 	    		Object3D currShape = (Object3D)objects.get(k);
-	    		System.out.println(currShape.toString());
+	    		System.out.println(" working on   " + currShape.toString());
 	    		TransformGroup objectGroupWrap = currShape.drawMe();
-	    		  MouseRotate behavior = new MouseRotate();
-	    		  behavior.setTransformGroup(objectGroupWrap);
-	    		  objectGroupWrap.addChild(behavior);
-	    		  //behavior.setSchedulingBounds(bounds);
+	    		
+
 	    		objectBranchWrapper.addChild(objectGroupWrap);
 	    		sceneRoot.addChild(objectBranchWrapper);
 	    		objectBranchWrapper = null;
 	    	}
-
+	    	if(drawFloorFirstCall == false)
+	    		drawFloor();
 	    
 	    }
   }
   
-  
+  public void drawFloor()
+  {
+
+	  if(drawFloorFirstCall == true)
+		  drawFloorFirstCall = false;
+	  else
+	  {
+		  BranchGroup detachMe = (BranchGroup)sceneRoot.getChild(sceneRoot.numChildren()-1);
+		  //detachMe.detach();
+		  sceneRoot.removeChild(sceneRoot.numChildren()-1);
+	  }
+		  
+	  System.out.println(" the size of scene root after flooring " + sceneRoot.numChildren());
+	  Transform3D rot = new Transform3D();
+	    
+	    TransformGroup obby = new TransformGroup(rot);
+	    
+	    TextureLoader texLoader = new TextureLoader("flooring.jpg", this);
+	    Texture groundTex = texLoader.getTexture();
+	    groundTex.setBoundaryModeS(Texture.WRAP);
+	    groundTex.setBoundaryModeT(Texture.WRAP);
+	    groundTex.setMinFilter(Texture.NICEST);
+	    groundTex.setMagFilter(Texture.NICEST);
+	    groundTex.setMipMapMode(Texture.BASE_LEVEL);
+	    groundTex.setEnable(true);
+
+	    Appearance groundApp = new Appearance();
+
+	    Material groundMat = new Material();
+	    groundMat.setAmbientColor(0.6f, 0.6f, 0.6f);
+	    groundMat.setDiffuseColor(1.0f, 1.0f, 1.0f);
+	    groundMat.setSpecularColor(0.0f, 0.0f, 0.0f);
+	    groundApp.setMaterial(groundMat);
+
+	    rot = new Transform3D();
+	    rot.setScale(new Vector3d(4.0, 4.0, 1.0));
+
+	    TextureAttributes groundTexAtt = new TextureAttributes();
+	    groundTexAtt.setTextureMode(TextureAttributes.MODULATE);
+	    groundTexAtt.setPerspectiveCorrectionMode(TextureAttributes.NICEST);
+	    groundTexAtt.setTextureTransform(rot);
+	    groundApp.setTextureAttributes(groundTexAtt);
+
+	    if (groundTex != null)
+	      groundApp.setTexture(groundTex);
+
+	    ElevationGrid ground = new ElevationGrid((int)EditorWindow.editor.environment.getLength(), // X dimension
+	    		(int)EditorWindow.editor.environment.getWidth(), // Z dimension
+	        2.0f, // X spacing
+	        2.0f, // Z spacing
+	        // Automatically use zero heights
+	        groundApp); // Appearance
+	    TransformGroup tg;
+	    Vector3f trans = new Vector3f();
+	    trans.set(0.0f, -1.0f, 0.0f);
+	    rot.set(trans);
+	    obby = new TransformGroup(rot);
+	    obby.addChild(ground);
+	    BranchGroup wrap = new BranchGroup();
+		wrap.setCapability(BranchGroup.ALLOW_CHILDREN_READ);
+		wrap.setCapability(BranchGroup.ALLOW_CHILDREN_WRITE);
+		wrap.setCapability(BranchGroup.ALLOW_DETACH);
+	    wrap.addChild(obby);
+	    sceneRoot.addChild(wrap);
+		  System.out.println(" the size of scene root beyond flooring " + sceneRoot.numChildren());
+  }
   /** 
    * Enables Object Selection. Creates a new Canvas that is able to select objects
    * It throws a ray on the x and y coordinates and "captures" the object it hits
@@ -634,6 +679,8 @@ public class Java3DFrame extends Applet implements MouseListener {
 
          Primitive p = (Primitive)result.getNode(PickResult.PRIMITIVE);
 
+         
+         
          Shape3D s = (Shape3D)result.getNode(PickResult.SHAPE3D); //Get the shape object
 
          if (p != null) {  //Line Highlighting actions go here
@@ -659,7 +706,8 @@ public class Java3DFrame extends Applet implements MouseListener {
    * Action to be taken with the mouse is pressed
    */
   public void mousePressed(MouseEvent e) {
-      saySomething("Mouse pressed; # of clicks: "
+      
+	  saySomething("Mouse pressed; # of clicks: "
                    + e.getClickCount(), e);
    }
 
