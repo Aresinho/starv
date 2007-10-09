@@ -43,6 +43,12 @@ import com.sun.j3d.utils.universe.PlatformGeometry;
 import com.sun.j3d.utils.universe.SimpleUniverse;
 import com.sun.j3d.utils.universe.Viewer;
 import com.sun.j3d.utils.universe.ViewingPlatform;
+
+/**
+ * 
+ * @author IPAPI
+ *
+ */
 class CheckboxMenu extends Menu implements ItemListener {
   // State
   protected CheckboxMenuItem[] checks = null;
@@ -52,11 +58,25 @@ class CheckboxMenu extends Menu implements ItemListener {
   protected CheckboxMenuListener listener = null;
 
   //  Construct
+  /**
+   * CheckeboxMenu
+   * @param name the name of the checkbox
+   * @param items an array of NameValue
+   * @param listen a CheckboxMenuListner
+   */
   public CheckboxMenu(String name, NameValue[] items,
       CheckboxMenuListener listen) {
     this(name, items, 0, listen);
   }
-
+ 
+  /**
+   * CheckboxMenu
+   *  this constructor uses the 
+   * @param name
+   * @param items
+   * @param cur
+   * @param listen
+   */
   public CheckboxMenu(String name, NameValue[] items, int cur,
       CheckboxMenuListener listen) {
     super(name);
@@ -76,6 +96,10 @@ class CheckboxMenu extends Menu implements ItemListener {
   }
 
   //  Handle checkbox changed events
+  /**
+   * handles the events on a CheckBoxMenuItems.
+   * @param event an ItemEvent
+   */
   public void itemStateChanged(ItemEvent event) {
     Object src = event.getSource();
 
@@ -94,10 +118,18 @@ class CheckboxMenu extends Menu implements ItemListener {
   }
 
   // Methods to get and set state
+  /**  
+   * returns the current menu item position.
+   * @return current the number of the current menu item.
+   */
   public int getCurrent() {
     return current;
   }
-
+ 
+  /**
+   * set the current position of a menu item
+   * @param cur
+   */
   public void setCurrent(int cur) {
     if (cur < 0 || cur >= checks.length)
       return; // ignore out of range choices
@@ -108,12 +140,22 @@ class CheckboxMenu extends Menu implements ItemListener {
     checks[current].setState(true);
   }
 
+  
+  
+  /**
+   * returns the selected menu item
+   * @return checks[current] the selected menu item.
+   */
   public CheckboxMenuItem getSelectedCheckbox() {
     if (checks == null)
       return null;
     return checks[current];
   }
 
+  /**
+   * sets teh selected menu item
+   * @param item
+   */
   public void setSelectedCheckbox(CheckboxMenuItem item) {
     if (checks == null)
       return;
