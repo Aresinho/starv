@@ -2,8 +2,17 @@
 
 import java.awt.*;
 
+/**
+ * 
+ * @author IPAPI
+ *
+ */
 public class EditMenu extends MenuHandler {
 
+	/**
+	 * Constructor using MenuHandler's constructor
+	 *  and adds three menu items: Map, Simulation Parameters, and Crop Trace.
+	 */
 	protected EditMenu()
 	{
 		super("Edit");
@@ -19,7 +28,5 @@ public class EditMenu extends MenuHandler {
 		add(menu = new MenuItem("Crop Trace"));
 		menu.addActionListener(this);
 	}
-	
-	
 	
 }
