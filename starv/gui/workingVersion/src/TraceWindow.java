@@ -29,7 +29,9 @@ public class TraceWindow extends Window implements ActionListener
 	
 	long seconds, minutes, hours;
 	
-
+	/**
+	 * 
+	 */
 	protected TraceWindow()
 	{
 		super();
