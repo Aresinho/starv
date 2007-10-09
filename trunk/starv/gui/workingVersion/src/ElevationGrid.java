@@ -73,9 +73,10 @@ class ElevationGrid extends Primitive {
 
   private IndexedTriangleStripArray tristrip = null;
 
-  //
-  //  Construct an elevation grid
-  //
+  /**
+   * Constructor
+   * constructs an elevation grid
+   */
   public ElevationGrid() {
     xDimension = 2;
     zDimension = 2;
@@ -86,6 +87,12 @@ class ElevationGrid extends Primitive {
     rebuild();
   }
 
+  /**
+   * Constructor
+   * constructs an elevation grid
+   * @param xDim the desire initial position
+   * @param zDim the desire initial position
+   */
   public ElevationGrid(int xDim, int zDim) {
     xDimension = xDim;
     zDimension = zDim;
@@ -95,7 +102,13 @@ class ElevationGrid extends Primitive {
     zeroHeights();
     rebuild();
   }
-
+ /**
+  * Constructor
+  * constructs an elevation grid
+  * @param xDim the desired initial position
+  * @param zDim the desired initial position
+  * @param app the desired appearance of the elevation
+  */
   public ElevationGrid(int xDim, int zDim, Appearance app) {
     xDimension = xDim;
     zDimension = zDim;
@@ -105,7 +118,13 @@ class ElevationGrid extends Primitive {
     zeroHeights();
     rebuild();
   }
-
+ /**
+  * 
+  * @param xDim
+  * @param zDim
+  * @param xSpace
+  * @param zSpace
+  */
   public ElevationGrid(int xDim, int zDim, double xSpace, double zSpace) {
     xDimension = xDim;
     zDimension = zDim;
@@ -116,6 +135,15 @@ class ElevationGrid extends Primitive {
     rebuild();
   }
 
+  
+  /**
+   * 
+   * @param xDim
+   * @param zDim
+   * @param xSpace
+   * @param zSpace
+   * @param app
+   */
   public ElevationGrid(int xDim, int zDim, double xSpace, double zSpace,
       Appearance app) {
     xDimension = xDim;
@@ -126,20 +154,53 @@ class ElevationGrid extends Primitive {
     zeroHeights();
     rebuild();
   }
-
+  
+  /**
+   * 
+   * @param xDim
+   * @param zDim
+   * @param h
+   */
   public ElevationGrid(int xDim, int zDim, double[] h) {
     this(xDim, zDim, 1.0, 1.0, h, null);
   }
 
+  
+  /**
+   * 
+   * @param xDim
+   * @param zDim
+   * @param h
+   * @param app
+   */
   public ElevationGrid(int xDim, int zDim, double[] h, Appearance app) {
     this(xDim, zDim, 1.0, 1.0, h, app);
   }
 
+  
+  /**
+   * 
+   * @param xDim
+   * @param zDim
+   * @param xSpace
+   * @param zSpace
+   * @param h
+   */
   public ElevationGrid(int xDim, int zDim, double xSpace, double zSpace,
       double[] h) {
     this(xDim, zDim, xSpace, zSpace, h, null);
   }
 
+  
+  /**
+   * 
+   * @param xDim
+   * @param zDim
+   * @param xSpace
+   * @param zSpace
+   * @param h
+   * @param app
+   */
   public ElevationGrid(int xDim, int zDim, double xSpace, double zSpace,
       double[] h, Appearance app) {
     xDimension = xDim;
@@ -157,6 +218,9 @@ class ElevationGrid extends Primitive {
     rebuild();
   }
 
+  /**
+   * 
+   */
   private void zeroHeights() {
     int n = xDimension * zDimension;
     heights = new double[n];
@@ -164,6 +228,11 @@ class ElevationGrid extends Primitive {
       heights[i] = 0.0;
   }
 
+  
+  
+  /**
+   * 
+   */
   private void rebuild() {
     // Build a shape
     if (shape == null) {
@@ -293,6 +362,9 @@ class ElevationGrid extends Primitive {
   //
   //  Control the appearance
   //
+  /**
+   * @param app
+   */
   public void setAppearance(Appearance app) {
     mainAppearance = app;
     if (shape != null)
@@ -302,6 +374,10 @@ class ElevationGrid extends Primitive {
   //
   //  Control grid parameters
   //
+  
+  /**
+   * @param h
+   */
   public void setHeights(double[] h) {
     if (h == null)
       zeroHeights();
@@ -313,42 +389,77 @@ class ElevationGrid extends Primitive {
     rebuild();
   }
 
+  /**
+   * 
+   * @return heights an array of doubles
+   */
   public double[] getHeights() {
     return heights;
   }
 
+  /**
+   * 
+   * @param xDim
+   */
   public void setXDimension(int xDim) {
     xDimension = xDim;
     rebuild();
   }
 
+  /**
+   * 
+   * @return xDimention  the position in the x axis
+   */
   public int getXDimension() {
     return xDimension;
   }
 
+  
+  /**
+   *  ste the desire value to the grid in the z axis
+   * @param zDim the value to be set in the z axis
+   */
   public void setZDimension(int zDim) {
     zDimension = zDim;
     rebuild();
   }
-
+/**
+ * 
+ * @return zDimention   the current position in the z axis
+ */
   public int getZDimension() {
     return zDimension;
   }
 
+  /**
+   *  sets the spacing in the x axis
+   * @param xSpace
+   */
   public void setXSpacing(double xSpace) {
     xSpacing = xSpace;
     rebuild();
   }
 
+  /**
+   *  returns the space in the x axis
+   * @return xSpacing
+   */
   public double getXSpacing() {
     return xSpacing;
   }
-
+  /**
+   * sets the spacing in the z axis 
+   * @param zSpace
+   */
   public void setZSpacing(double zSpace) {
     zSpacing = zSpace;
     rebuild();
   }
 
+  /**
+   *  retuns the current spacing in the z axis
+   * @return zSpacing
+   */
   public double getZSpacing() {
     return zSpacing;
   }
@@ -356,20 +467,36 @@ class ElevationGrid extends Primitive {
   //
   //  Provide info on the shape and geometry
   //
+  /**
+   * @param partid 
+   * @return a Shpae3D Object.
+   */
   public Shape3D getShape(int partid) {
     return shape;
   }
 
+  
+  /**
+   * @return 
+   */
   public int getNumTriangles() {
     return xDimension * zDimension * 2;
   }
 
+  
+  /**
+   * @return
+   */
   public int getNumVertices() {
     return xDimension * zDimension;
   }
 
   /* (non-Javadoc)
    * @see com.sun.j3d.utils.geometry.Primitive#getAppearance(int)
+   */
+  
+  /**
+   * @param arg0
    */
   public Appearance getAppearance(int arg0) {
     // TODO Auto-generated method stub
