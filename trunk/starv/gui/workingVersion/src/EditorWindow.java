@@ -4,10 +4,20 @@ import java.awt.ScrollPane;
 
 import javax.swing.*;
 
-
+/**
+ * 
+ * @author IPAPI
+ *
+ */
 public class EditorWindow extends Window 
 {
 	public static EnvironmentEditor editor = new EnvironmentEditor();
+	
+	/**
+	 *  Constructor
+	 *   Creates a Java3D frame, its added to the main system
+	 *   in a fixed position.
+	 */
 	protected EditorWindow()
 	{
 		super();
