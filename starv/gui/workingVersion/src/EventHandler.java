@@ -5,6 +5,7 @@ import java.awt.event.*;
 import javax.swing.*;
 
 import javax.swing.JComponent;
+import javax.vecmath.Vector3d;
 
 public class EventHandler implements ActionListener {
 	
@@ -207,9 +208,22 @@ public class EventHandler implements ActionListener {
 		}
 		if( (Context.EDITOR.toString()).equals(MainSystem.context) && event.equalsIgnoreCase("Help"))
 		{
-			MainSystem.ex.topDown();
+			//MainSystem.ex.topDown();
+			Sphere3D mySphere = new Sphere3D();
+			mySphere.setVector(new Vector3d(2.0,1.0,1.0));
+			EditorWindow.editor.environment.addObject3D(mySphere);
+			MainSystem.ex.reDraw();
 		}
+		if( (Context.EDITOR.toString()).equals(MainSystem.context) && event.equalsIgnoreCase("About STARV"))
+		{
 		
+			Sphere3D mySphere = new Sphere3D();
+			mySphere.setVector(new Vector3d(-2.0,1.0,1.0));
+			EditorWindow.editor.environment.addObject3D(mySphere);
+			MainSystem.ex.reDraw();
+
+				
+		}
 	}
 	
 	/**
