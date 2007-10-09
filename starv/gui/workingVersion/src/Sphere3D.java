@@ -6,14 +6,15 @@ import com.sun.j3d.utils.geometry.Sphere;
 
 
 public class Sphere3D extends Object3D {
-	public static Vector3d translation;
+	public Vector3d translation;
+	
 	public Sphere3D()
 	{
 		super();
 	}
-	public TransformGroup drawMe(Vector3d newVector)
+	public TransformGroup drawMe()
 	{
-		transform3d.setTranslation(newVector);
+		transform3d.setTranslation(translation);
 		group = new TransformGroup(transform3d);
 		group.addChild(new Sphere(1f));
 		return group;
