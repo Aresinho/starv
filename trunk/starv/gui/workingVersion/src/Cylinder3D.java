@@ -13,9 +13,9 @@ public class Cylinder3D extends Object3D {
 	{
 		super();
 	}
-	public TransformGroup drawMe(Vector3d newVector)
+	public TransformGroup drawMe()
 	{
-		transform3d.setTranslation(newVector);
+		transform3d.setTranslation(translation);
 		group = new TransformGroup(transform3d);
 		group.addChild(new Cylinder(radius,length));
 		return group;

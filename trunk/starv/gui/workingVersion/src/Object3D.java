@@ -13,7 +13,6 @@ public abstract class Object3D {
 	public Object3D()
 	{
 		indentifier = nameGenerator();
-		//translation = new Vector3d(0.0f, 0.0f, 0.0f);
 	}
 	private String nameGenerator()
 	{
@@ -112,10 +111,9 @@ public abstract class Object3D {
 	{
 		return indentifier;
 	}
-	public TransformGroup drawMe(Vector3d newVector)
-	{
-		return null;
-	}
+	
+	public abstract TransformGroup drawMe();
+
 	public void setRotation(double value, char type)
 	{
 		switch(type)
@@ -129,7 +127,7 @@ public abstract class Object3D {
 		case 'z':
 			transform3d.rotZ(value);
 			break;
-		}//end swithc
+		}//end switch
 	}//end setRotation
 	public Vector3d getVector()
 	{
