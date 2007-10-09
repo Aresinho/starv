@@ -10,7 +10,11 @@ import javax.swing.JPanel;
 import javax.swing.Timer;
 
 
-
+/**
+ * 
+ * @author IPAPI
+ *
+ */
 public class TraceWindow extends Window implements ActionListener
 {	EventHandler delegate = new EventHandler();
 	static JLabel distance = new JLabel("Distance Traveled: ");
@@ -107,7 +111,9 @@ public class TraceWindow extends Window implements ActionListener
 	{ 
 	    delegate.findAndExecute(item.getActionCommand()); 
 	}
-	
+	/**
+	 * 
+	 */
 	public void updateTime()
 	{
 		String min, sec, hour;
