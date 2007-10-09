@@ -3,7 +3,11 @@
 import java.io.Serializable;
 import
 java.util.*;
-
+/**
+ * 
+ * @author IPAPI
+ *
+ */
 public class Environment implements Serializable {
 
 	private LinkedList objects;
@@ -19,6 +23,11 @@ public class Environment implements Serializable {
 	private static final int UNIT_FEET = 2;
 	private static final int UNIT_MILES = 3;
 	
+	
+	/**
+	 * Constructor
+	 * creates an environment with a fixed  dimension
+	 */
 	public Environment()
 	{
 		objects = new LinkedList();
@@ -28,6 +37,13 @@ public class Environment implements Serializable {
 		units = UNIT_METERS;
 	}
 	
+	
+	/**
+	 * creates an environment with desire dimension an a given name.
+	 * @param l the desire length
+	 * @param w the desire width
+	 * @param n the desire name
+	 */
 	public Environment(double l, double w, String n)
 	{
 		length = l;
@@ -37,16 +53,32 @@ public class Environment implements Serializable {
 		units = UNIT_METERS;
 	}
 	
+	
+	/**
+	 *  sets a desire length
+	 * @param l
+	 */
 	public void setLength(double l)
 	{
 		length = l;
 	}
 	
+	/**
+	 *  sets a desire width
+	 * @param w
+	 */
 	public void setWidth(double w)
 	{
 		width = w;
 	}
 	
+	
+	/**
+	 *  sets the desire  longitude
+	 * @param deg    degrees
+	 * @param min    minutes
+	 * @param dir    direction
+	 */
 	public void setLongitude(String deg, String min, String dir)
 	{
 		longitude[0] = deg;
@@ -54,6 +86,13 @@ public class Environment implements Serializable {
 		longitude[2] = dir;
 	}
 	
+	
+	/**
+	 *  sets the desire latitud
+	 * @param deg   degrees
+	 * @param min   minutes
+	 * @param dir   direction
+	 */
 	public void setLatitude(String deg, String min, String dir)
 	{
 		latitude[0] = deg;
@@ -61,35 +100,67 @@ public class Environment implements Serializable {
 		latitude[2] = dir;
 	}
 	
+	/**
+	 *  sets the desire name
+	 * @param n  name
+	 */
 	public void setName(String n)
 	{
 		name = n;
 	}
 	
+	/**
+	 *  
+	 * @return the length of the environment
+	 */
 	public double getLength()
 	{
 		return length;
 	}
 	
+	/**
+	 * 
+	 * @return the width of the environment
+	 */
 	public double getWidth()
 	{
 		return width;
 	}
 	
+	
+	/**
+	 * 
+	 * @return the longitude
+	 */
 	public String[] getLongitude()
 	{
 		return longitude;
 	}
 	
+	
+	/**
+	 * 
+	 * @return the latitude of the environment
+	 */
 	public String[] getLatitude()
 	{
 		return latitude;
 	}
 	
+	
+	/**
+	 * 
+	 * @return the name of the environment
+	 */
 	public String getName()
 	{
 		return name;
 	}
+	
+	/**
+	 * 
+	 * @param replacer
+	 */
 	public void replace(Object3D replacer)
 	{
 		for(int k =0; k < objects.size(); k++)
@@ -105,6 +176,12 @@ public class Environment implements Serializable {
 				
 		}
 	}// end replace
+	
+	
+	/**
+	 * 
+	 * @param newUnits
+	 */
 	public void setUnits(int newUnits)
 	{
 		switch(newUnits){
@@ -125,14 +202,30 @@ public class Environment implements Serializable {
 			break;
 		}
 	}
+	
+	
+	/**
+	 * 
+	 * @return
+	 */
 	public int getUnits()
 	{
 		return units;
 	}
+	
+	/**
+	 * 
+	 * @param newObject3D
+	 */
 	public void addObject3D(Object3D newObject3D)
 	{
 		objects.add(newObject3D);
 	}
+	
+	/**
+	 * 
+	 * @param removeMe
+	 */
 	public void removeObject3D(Object3D removeMe)
 	{
 		for(int k=0; k< objects.size();k++)
@@ -143,10 +236,20 @@ public class Environment implements Serializable {
 			}
 		}
 	}//end removeObject3D
+	
+	/**
+	 * 
+	 * @return
+	 */
 	public LinkedList getObjects()
 	{
 		return objects;
 	}
+	
+	/**
+	 * 
+	 * @param newObjects
+	 */
 	public void setObjects(LinkedList newObjects)
 	{
 		this.objects = newObjects;
