@@ -12,6 +12,7 @@ public class Box3D extends Object3D {
 	{
 		super();
 	}
+	
 	public TransformGroup drawMe(Vector3d newVector)
 	{
 		transform3d.setTranslation(newVector);
