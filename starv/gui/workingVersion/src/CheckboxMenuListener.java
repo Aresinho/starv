@@ -43,7 +43,10 @@ import com.sun.j3d.utils.universe.PlatformGeometry;
 import com.sun.j3d.utils.universe.SimpleUniverse;
 import com.sun.j3d.utils.universe.Viewer;
 import com.sun.j3d.utils.universe.ViewingPlatform;
-
+/**
+ *  An interface form EventListener
+ * @author IPAPI
+ */
 interface CheckboxMenuListener extends EventListener {
   public void checkboxChanged(CheckboxMenu menu, int check);
 }
