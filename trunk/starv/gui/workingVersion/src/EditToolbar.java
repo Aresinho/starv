@@ -5,17 +5,19 @@ import javax.swing.*;
 
 /**
  * Control Toolbar for the EnvironmentEditor Window
- * @author Ares
+ * @author IPAPI
  *
  */
 public class EditToolbar extends ControlToolbar
 {
-	
+	/**
+	 * Constructor
+	 * creates a panel, buttons are added with their respective image
+	 * and then place in a desire position
+	 */
 	public EditToolbar()
 	{
-		/*
-		 * Images for buttons
-		 */
+		
 		ImageIcon panupImage = createImageIcon("Icons/up16.gif");
 		ImageIcon panDownImage = createImageIcon("Icons/down16.gif");
 		ImageIcon panRightImage = createImageIcon("Icons/Forward16.gif");
@@ -40,7 +42,7 @@ public class EditToolbar extends ControlToolbar
 		JButton panDowner = new JButton("Pan Down", panDownImage);
 		panDowner.addActionListener(this);
 		
-		//Construct
+		// the buttons are added to the panell.
 		panUp.add(panLeft);
 		panUp.add(panRight);
 		panDown.add(panUper);
