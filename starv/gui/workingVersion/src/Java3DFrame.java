@@ -597,7 +597,7 @@ public class Java3DFrame extends Applet implements MouseListener {
 	    		
 	    		Object3D currShape = (Object3D)objects.get(k);
 	    		System.out.println(currShape.toString());
-	    		TransformGroup objectGroupWrap = currShape.drawMe(currShape.getVector());
+	    		TransformGroup objectGroupWrap = currShape.drawMe();
 	    		  MouseRotate behavior = new MouseRotate();
 	    		  behavior.setTransformGroup(objectGroupWrap);
 	    		  objectGroupWrap.addChild(behavior);
@@ -694,7 +694,10 @@ public class Java3DFrame extends Applet implements MouseListener {
    void saySomething(String eventDescription, MouseEvent e) {
 	   System.out.print(eventDescription);
    }
-  
+ 
+   
+   
+   
   //  Well known colors, positions, and directions
   public final static Color3f White = new Color3f(1.0f, 1.0f, 1.0f);
 
