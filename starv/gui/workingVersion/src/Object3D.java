@@ -4,12 +4,15 @@ import javax.media.j3d.Transform3D;
 import javax.media.j3d.TransformGroup;
 import javax.vecmath.Vector3d;
 
+import com.sun.j3d.utils.geometry.Primitive;
+
 
 public abstract class Object3D {
 	
 	public TransformGroup group;
 	public Transform3D transform3d = new Transform3D();
 	public String indentifier;
+	public Primitive primitive;
 	public Object3D()
 	{
 		indentifier = nameGenerator();
@@ -132,6 +135,10 @@ public abstract class Object3D {
 	public Vector3d getVector()
 	{
 		return null;
+	}
+	public Primitive getPrimitive()
+	{
+		return primitive;
 	}
 	
 }

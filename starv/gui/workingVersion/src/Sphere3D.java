@@ -2,15 +2,16 @@ import javax.media.j3d.TransformGroup;
 import javax.vecmath.Vector3d;
 
 import com.sun.j3d.utils.geometry.Cylinder;
+import com.sun.j3d.utils.geometry.Primitive;
 import com.sun.j3d.utils.geometry.Sphere;
 
 
 public class Sphere3D extends Object3D {
 	public Vector3d translation;
-	
 	public Sphere3D()
 	{
 		super();
+		primitive = new Sphere(1f);
 	}
 	public TransformGroup drawMe()
 	{
